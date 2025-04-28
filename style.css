@@ -10,3 +10,18 @@ body {
     border: 1px solid #ccc;
     margin-top: 1em;
   }
+
+  #resetButton {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #f44336;  /* Red button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  #resetButton:hover {
+    background-color: #e57373;
+  }
