@@ -25,3 +25,28 @@ body {
   #resetButton:hover {
     background-color: #e57373;
   }
+  
+  /* Style for the container holding the label, input, and button */
+#numVerticesContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Optional: Style for the label */
+#numVerticesContainer label {
+  font-size: 16px;
+}
+
+/* Optional: Style for the input */
+#numVerticesContainer input {
+  font-size: 16px;
+  width: 60px;
+}
+
+/* Optional: Style for the button */
+#numVerticesContainer button {
+  font-size: 16px;
+  padding: 5px 10px;
+}

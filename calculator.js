@@ -1,24 +1,31 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const n = 7;  // number of vertices
+let n = 7;  // number of vertices
 const radius = 250;
 const center = { x: canvas.width / 2, y: canvas.height / 2 };
-const vertices = [];
+let vertices = createVertices(n);  // Array of vertex positions
 
 let selectedVertices = [];
 let diagonals = [];
 
+function createVertices(numVertices) {
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = Math.min(centerX, centerY) * 0.8;
+  const verts = [];
 
+  for (let i = 0; i < numVertices; i++) {
+    const angle = (2 * Math.PI * i) / numVertices;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    verts.push({ x, y });
+  }
 
-// Calculate vertex positions
-for (let i = 0; i < n; i++) {
-  const angle = (2 * Math.PI * i) / n - Math.PI / 2;
-  const x = center.x + radius * Math.cos(angle);
-  const y = center.y + radius * Math.sin(angle);
-  vertices.push({ x, y });
+  return verts;
 }
 
+// Function to check if x is between a and b
 function isBetween(a, b, x) {
   if (a < b) {
     return a < x && x < b;
@@ -30,20 +37,20 @@ function isBetween(a, b, x) {
 function updateStatusMessage() {
   const n = vertices.length;
   const statusMessage = document.getElementById("statusMessage");
-  if (diagonals.length === n - 3) {
-    statusMessage.textContent = "Full triangulation!";
-  } 
-  else if (diagonals.length === 1) {
-    statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
 
-  }
-    else if (diagonals.length < n - 3) {
+  if (diagonals.length === n - 3) {
+    const quidditySequence = calculateQuidditySequence();
+    statusMessage.textContent = `Full triangulation! Quiddity sequence: [${quidditySequence.join(", ")}]`;
+  } else if (diagonals.length === 1) {
+    statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
+  } else if (diagonals.length < n - 3) {
     statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonals.`;
   } else {
     statusMessage.textContent = "Error: too many diagonals! Please tell me how you did that.";
   }
 }
 
+// Function to reset the triangulation
 function resetTriangulation() {
   diagonals = [];
   selectedVertices = [];
@@ -77,7 +84,6 @@ function drawPolygon() {
   });
   ctx.strokeStyle = "black";  // reset for polygon outline
 
-
   // Draw vertices as circles
   vertices.forEach((v, i) => {
     ctx.beginPath();
@@ -89,7 +95,6 @@ function drawPolygon() {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(i, v.x, v.y);  // optional: show index numbers
-
   });
 
   // Draw highlight for selected vertices
@@ -101,11 +106,59 @@ function drawPolygon() {
     ctx.arc(v.x, v.y, 12, 0, 2 * Math.PI);
     ctx.stroke();
   });
-ctx.lineWidth = 1;  // reset
-ctx.strokeStyle = "black";  // reset
+  ctx.lineWidth = 1;  // reset
+  ctx.strokeStyle = "black";  // reset
 }
 
 drawPolygon();
+
+function updatePolygonSize() {
+  const numVerticesInput = document.getElementById("numVertices");
+  let numVertices = parseInt(numVerticesInput.value, 10);
+
+  // Ensure the number of vertices is at least 4
+  if (numVertices < 4) {
+    alert("The polygon must have at least 4 vertices!");
+    return;
+  }
+  n = numVertices;
+  // Reset diagonals and selected vertices
+  diagonals = [];
+  selectedVertices = [];
+  
+  // Update the vertices array to create a new polygon with the specified number of vertices
+  //vertices = Array.from({ length: numVertices }, (_, i) => i);  // Array [0, 1, 2, ..., n-1]
+  vertices = createVertices(n);  // Create new vertices based on the updated number of vertices
+  drawPolygon();  // Redraw the polygon with the new number of vertices
+  updateStatusMessage();  // Update the status message
+}
+
+function calculateQuidditySequence() {
+  // Check if the triangulation is complete
+  if (diagonals.length !== n - 3) {
+    console.error("The triangulation is not complete. Cannot calculate quiddity sequence.");
+    return []; // Return an empty array if the triangulation is incomplete
+  }
+
+  // Initialize the quiddity sequence with zeros
+  const quidditySequence = Array(n).fill(0);
+
+  // Count the number of diagonals connected to each vertex
+  diagonals.forEach(([a, b]) => {
+    quidditySequence[a]++;
+    quidditySequence[b]++;
+  });
+
+  // Add 2 to each vertex to account for the polygon edges
+  for (let i = 0; i < n; i++) {
+    quidditySequence[i] += 1;
+  }
+
+  return quidditySequence;
+}
+
+const updatePolygonButton = document.getElementById("updatePolygon");
+updatePolygonButton.addEventListener("click", updatePolygonSize);
 
 // Handle click to select vertex
 canvas.addEventListener("click", function (e) {
