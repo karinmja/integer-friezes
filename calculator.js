@@ -40,7 +40,30 @@ function updateStatusMessage() {
 
   if (diagonals.length === n - 3) {
     const quidditySequence = calculateQuidditySequence();
-    statusMessage.textContent = `Full triangulation! Quiddity sequence: [${quidditySequence.join(", ")}]`;
+    const frieze = calculateFrieze(quidditySequence);
+
+    // Format the frieze for display
+    const friezeHTML = `
+      <table style="border-collapse: collapse; margin: 0 auto;">
+      ${frieze
+        .map((row, rowIndex) => `
+          <tr>
+            ${row
+              .map((cell, colIndex) => {
+                // Add offset: empty cells for diagonal alignment
+                if (rowIndex % 2 === 1 && colIndex === 0) {
+                  // Add an empty cell at the start of odd rows
+                  return `<td style="width: 20px; height: 20px;"></td><td style="width: 20px; height: 20px; text-align: center; border: 1px solid black;">${cell}</td><td style="width: 20px; height: 20px;"></td>`;
+                }
+                return `<td style="width: 20px; height: 20px; text-align: center; border: 1px solid black;">${cell}</td><td style="width: 20px; height: 20px;"></td>`;
+              })
+              .join("")}
+          </tr>
+        `)
+        .join("")}
+      </table>
+    `;
+    statusMessage.innerHTML = `Full triangulation! Quiddity sequence: [${quidditySequence.join(", ")}]<br><br>Frieze pattern:<br>${friezeHTML}`;
   } else if (diagonals.length === 1) {
     statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
   } else if (diagonals.length < n - 3) {
@@ -149,7 +172,7 @@ function calculateQuidditySequence() {
     quidditySequence[b]++;
   });
 
-  // Add 2 to each vertex to account for the polygon edges
+  // Add 1 to each vertex to account for the polygon edges
   for (let i = 0; i < n; i++) {
     quidditySequence[i] += 1;
   }
@@ -159,6 +182,51 @@ function calculateQuidditySequence() {
 
 const updatePolygonButton = document.getElementById("updatePolygon");
 updatePolygonButton.addEventListener("click", updatePolygonSize);
+
+function calculateFrieze(quidditySequence) {
+  const n = quidditySequence.length;
+
+  // Initialize the frieze grid
+  const frieze = [];
+
+  // First row: all zeroes
+  frieze.push(Array(n * 2).fill(0));
+  console.log("First row:", frieze[0]);
+  // Second row: all ones, offset diagonally
+  frieze.push(Array(n * 2).fill(1));
+  console.log("Second row:", frieze[1]);
+  // Third row: quiddity sequence repeated twice
+  frieze.push([...quidditySequence, ...quidditySequence]);
+  console.log("Third row:", frieze[2]);
+  // Fill the rest of the frieze
+  for (let row = 3; row < n + 1; row++) {
+    const currentRow = Array(n * 2).fill(0);
+
+    for (let col = 0; col < n * 2; col++) {
+      // Get the numbers in the diamond
+      const a = frieze[row - 2][col]; // Current row, two rows above
+      let b = 0;
+      let c = 0;
+      if (row % 2 === 0) {
+        b = frieze[row - 1][(col - 1 + n * 2) % (n * 2)]; // Left in the row above
+        c = frieze[row - 1][col]; // Right in the row above
+      } else {
+        b = frieze[row - 1][(col + 1 + n * 2) % (n * 2)]; // Right in the row above
+        c = frieze[row - 1][col]; // Left in the row above
+      }
+      // Calculate the number using the rule: b * c - a * d = 1
+      currentRow[col] = Math.floor((b * c - 1) / a);
+    }
+    console.log(`Row ${row}:`, currentRow);
+    frieze.push(currentRow);
+  }
+
+  // Add the final rows: all ones and all zeroes
+  //frieze.push(Array(n * 2).fill(1));
+  //frieze.push(Array(n * 2).fill(0));
+
+  return frieze;
+}
 
 // Handle click to select vertex
 canvas.addEventListener("click", function (e) {
@@ -207,3 +275,4 @@ canvas.addEventListener("click", function (e) {
     }
   }
 });
+
