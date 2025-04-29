@@ -96,7 +96,7 @@ function drawPolygon() {
   ctx.stroke();
   // Draw diagonals
 
-  ctx.strokeStyle = "red";
+  ctx.strokeStyle = "blue";
   diagonals.forEach(([i, j]) => {
     const vi = vertices[i];
     const vj = vertices[j];
