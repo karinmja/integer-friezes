@@ -50,3 +50,9 @@ body {
   font-size: 16px;
   padding: 5px 10px;
 }
+
+
+/* Center all table cells */
+table td {
+  text-align: center;
+  vertical-align: middle;

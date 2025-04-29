@@ -42,27 +42,28 @@ function updateStatusMessage() {
     const quidditySequence = calculateQuidditySequence();
     const frieze = calculateFrieze(quidditySequence);
 
-    // Format the frieze for display
+    // Format the frieze as an HTML table with offset
     const friezeHTML = `
       <table style="border-collapse: collapse; margin: 0 auto;">
-      ${frieze
-        .map((row, rowIndex) => `
-          <tr>
-            ${row
-              .map((cell, colIndex) => {
-                // Add offset: empty cells for diagonal alignment
-                if (rowIndex % 2 === 1 && colIndex === 0) {
-                  // Add an empty cell at the start of odd rows
-                  return `<td style="width: 20px; height: 20px;"></td><td style="width: 20px; height: 20px; text-align: center; border: 1px solid black;">${cell}</td><td style="width: 20px; height: 20px;"></td>`;
-                }
-                return `<td style="width: 20px; height: 20px; text-align: center; border: 1px solid black;">${cell}</td><td style="width: 20px; height: 20px;"></td>`;
-              })
-              .join("")}
-          </tr>
-        `)
-        .join("")}
+        ${frieze
+          .map((row, rowIndex) => `
+            <tr>
+              ${row
+                .map((cell, colIndex) => {
+                  // Add offset: empty cells for diagonal alignment
+                  if (rowIndex % 2 === 1 && colIndex === 0) {
+                    // Add an empty cell at the start of odd rows
+                    return `<td style="width: 20px; height: 20px;"></td><td style="width: 20px; height: 20px; text-align: center;">${cell}</td><td style="width: 20px; height: 20px;">`;
+                  }
+                  return `<td style="width: 20px; height: 20px; text-align: center;">${cell}</td><td style="width: 20px; height: 20px;">`;
+                })
+                .join("")}
+            </tr>
+          `)
+          .join("")}
       </table>
     `;
+
     statusMessage.innerHTML = `Full triangulation! Quiddity sequence: [${quidditySequence.join(", ")}]<br><br>Frieze pattern:<br>${friezeHTML}`;
   } else if (diagonals.length === 1) {
     statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
