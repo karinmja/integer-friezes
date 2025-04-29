@@ -64,7 +64,7 @@ function updateStatusMessage() {
       </table>
     `;
 
-    statusMessage.innerHTML = `Full triangulation! Quiddity sequence: [${quidditySequence.join(", ")}]<br><br>Frieze pattern:<br>${friezeHTML}`;
+    statusMessage.innerHTML = `Full triangulation! <br/> Quiddity sequence: [${quidditySequence.join(", ")}]<br><br>Frieze pattern:<br>${friezeHTML}`;
   } else if (diagonals.length === 1) {
     statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
   } else if (diagonals.length < n - 3) {
@@ -73,6 +73,54 @@ function updateStatusMessage() {
     statusMessage.textContent = "Error: too many diagonals! Please tell me how you did that.";
   }
 }
+
+function completeTriangulation() {
+  const allDiagonals = [];
+  const n = vertices.length;
+
+  // Generate all possible diagonals
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const areAdjacent = (Math.abs(i - j) === 1) || (Math.abs(i - j) === n - 1);
+      if (!areAdjacent) {
+        allDiagonals.push([i, j]);
+      }
+    }
+  }
+
+  // Filter out diagonals that are already in the triangulation
+  const missingDiagonals = allDiagonals.filter(([a, b]) => {
+    return !diagonals.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+  });
+
+  // Randomly add missing diagonals until the triangulation is complete
+  while (diagonals.length < n - 3 && missingDiagonals.length > 0) {
+    const randomIndex = Math.floor(Math.random() * missingDiagonals.length);
+    const [a, b] = missingDiagonals.splice(randomIndex, 1)[0];
+
+    // Check if the new diagonal crosses any existing diagonal
+    let crosses = false;
+    for (const [c, d] of diagonals) {
+      if ((isBetween(a, b, c) !== isBetween(a, b, d)) &&
+          (isBetween(c, d, a) !== isBetween(c, d, b))) {
+        crosses = true;
+        break;
+      }
+    }
+
+    // Add the diagonal if it doesn't cross any existing diagonal
+    if (!crosses) {
+      diagonals.push([a, b]);
+    }
+  }
+
+  drawPolygon(); // Redraw the polygon with the new diagonals
+  updateStatusMessage(); // Update the status message
+}
+
+// Attach the function to the new button
+const completeTriangulationButton = document.getElementById("completeTriangulation");
+completeTriangulationButton.addEventListener("click", completeTriangulation);
 
 // Function to reset the triangulation
 function resetTriangulation() {
@@ -276,4 +324,54 @@ canvas.addEventListener("click", function (e) {
     }
   }
 });
+
+function createFanTriangulation() {
+  const n = vertices.length;
+
+  // Clear existing diagonals
+  diagonals = [];
+
+  // Add fan triangulation diagonals [0, 2], [0, 3], ..., [0, n-2]
+  for (let i = 2; i < n-1; i++) {
+    diagonals.push([0, i]);
+  }
+
+  drawPolygon(); // Redraw the polygon with the new diagonals
+  updateStatusMessage(); // Update the status message
+}
+
+function createZigZagTriangulation() {
+  const n = vertices.length;
+
+  // Clear existing diagonals
+  diagonals = [];
+
+  // Add zig-zag triangulation diagonals
+  let current = 0;
+  let forward = true;
+  
+  
+  for (let i = 1; i < n; i++) {
+    if (i<n/2-1) {
+      diagonals.push([i, n-i]);
+    } else if (i>n/2+1) {
+      diagonals.push([i, n-i+1]);
+    }
+    forward = !forward;
+  }
+  if (n%2==0) {
+    diagonals.push([n/2-1, n/2+1]);
+  }
+
+  drawPolygon(); // Redraw the polygon with the new diagonals
+  updateStatusMessage(); // Update the status message
+}
+
+// Attach the function to the new button
+const zigZagTriangulationButton = document.getElementById("zigZagTriangulation");
+zigZagTriangulationButton.addEventListener("click", createZigZagTriangulation);
+
+// Attach the function to the new button
+const fanTriangulationButton = document.getElementById("fanTriangulation");
+fanTriangulationButton.addEventListener("click", createFanTriangulation);
 
