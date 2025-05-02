@@ -375,3 +375,187 @@ zigZagTriangulationButton.addEventListener("click", createZigZagTriangulation);
 const fanTriangulationButton = document.getElementById("fanTriangulation");
 fanTriangulationButton.addEventListener("click", createFanTriangulation);
 
+// Function to check if a point is near a line segment
+function isPointNearLineSegment(x, y, x1, y1, x2, y2, tolerance = 5) {
+  // Check if the click is near either endpoint (vertices)
+  const distanceToStart = Math.sqrt((x - x1) ** 2 + (y - y1) ** 2);
+  const distanceToEnd = Math.sqrt((x - x2) ** 2 + (y - y2) ** 2);
+
+  if (distanceToStart <= tolerance || distanceToEnd <= tolerance) {
+    return false; // Click is near a vertex, not the line segment
+  }
+  const A = x - x1;
+  const B = y - y1;
+  const C = x2 - x1;
+  const D = y2 - y1;
+
+  const dot = A * C + B * D;
+  const lenSq = C * C + D * D;
+  const param = lenSq !== 0 ? dot / lenSq : -1;
+
+  let xx, yy;
+
+  if (param < 0) {
+    xx = x1;
+    yy = y1;
+  } else if (param > 1) {
+    xx = x2;
+    yy = y2;
+  } else {
+    xx = x1 + param * C;
+    yy = y1 + param * D;
+  }
+
+  const dx = x - xx;
+  const dy = y - yy;
+  return dx * dx + dy * dy <= tolerance * tolerance;
+}
+
+// Handle click to detect diagonal and show menu
+canvas.addEventListener("click", function (e) {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  let clickedDiagonal = null;
+
+  // Check if the click is near any diagonal
+  for (let i = 0; i < diagonals.length; i++) {
+    const [a, b] = diagonals[i];
+    const { x: x1, y: y1 } = vertices[a];
+    const { x: x2, y: y2 } = vertices[b];
+
+    if (isPointNearLineSegment(mouseX, mouseY, x1, y1, x2, y2)) {
+      clickedDiagonal = i;
+      break;
+    }
+  }
+
+  if (clickedDiagonal !== null) {
+    // Show the menu near the clicked diagonal
+    const vertexMenu = document.getElementById("vertexMenu");
+    vertexMenu.style.display = "block";
+    vertexMenu.style.left = `${e.clientX}px`;
+    vertexMenu.style.top = `${e.clientY}px`;
+
+    // Attach delete functionality to the menu
+    const deleteButton = document.getElementById("deleteVertex");
+    deleteButton.onclick = function () {
+      diagonals.splice(clickedDiagonal, 1); // Remove the clicked diagonal
+      vertexMenu.style.display = "none"; // Hide the menu
+      drawPolygon(); // Redraw the polygon
+      updateStatusMessage(); // Update the status message
+    };
+  } else {
+    // Hide the menu if no diagonal is clicked
+    const vertexMenu = document.getElementById("vertexMenu");
+    vertexMenu.style.display = "none";
+  }
+});
+
+// Function to check if the triangulation is complete
+function isFullTriangulation() {
+  return diagonals.length === n - 3;
+}
+
+// Function to find the unique permissible diagonal that replaces the given diagonal
+function findReplacementDiagonal(a, b) {
+// List all diagonals that do not cross the existing diagonals, except the one being replaced
+  const replacementDiagonals = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const areAdjacent = (Math.abs(i - j) === 1) || (Math.abs(i - j) === n - 1);
+      if (areAdjacent) {
+        continue; // Skip adjacent vertices
+      }
+      //check that the diagonal is not an existing diagonal
+      if (diagonals.some(d => (d[0] === i && d[1] === j) || (d[0] === j && d[1] === i))) {
+        continue;}
+      let crosses = false;
+      for (const [c, d] of diagonals) {
+        if ((c !== a || d !== b) && (isBetween(i, j, c) !== isBetween(i, j, d)) && (isBetween(c, d, i) !== isBetween(c, d, j))) {
+          crosses = true;
+          break;
+        }
+      }
+      if (!crosses) {
+          replacementDiagonals.push([i, j]);
+        }
+      
+    }
+  }
+  console.log(diagonals);
+  console.log("Replacement diagonals:", replacementDiagonals);
+  // Check if there is exactly one valid replacement diagonal
+  if (replacementDiagonals.length === 1) {
+    return replacementDiagonals[0]; // Return the unique replacement diagonal
+  }
+
+  return null; // No valid replacement diagonal found
+}
+
+// Handle click to detect diagonal and show menu
+canvas.addEventListener("click", function (e) {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  let clickedDiagonal = null;
+
+  // Check if the click is near any diagonal
+  for (let i = 0; i < diagonals.length; i++) {
+    const [a, b] = diagonals[i];
+    const { x: x1, y: y1 } = vertices[a];
+    const { x: x2, y: y2 } = vertices[b];
+
+    if (isPointNearLineSegment(mouseX, mouseY, x1, y1, x2, y2)) {
+      clickedDiagonal = i;
+      break;
+    }
+  }
+
+  if (clickedDiagonal !== null) {
+    // Show the menu near the clicked diagonal
+    const vertexMenu = document.getElementById("vertexMenu");
+    vertexMenu.style.display = "block";
+    vertexMenu.style.left = `${e.clientX}px`;
+    vertexMenu.style.top = `${e.clientY}px`;
+
+    // Enable or disable the "Mutate" button based on triangulation status
+    const mutateButton = document.getElementById("mutateDiagonal");
+    if (isFullTriangulation()) {
+      mutateButton.disabled = false;
+    } else {
+      mutateButton.disabled = true;
+    }
+
+    // Attach delete functionality to the menu
+    const deleteButton = document.getElementById("deleteVertex");
+    deleteButton.onclick = function () {
+      diagonals.splice(clickedDiagonal, 1); // Remove the clicked diagonal
+      vertexMenu.style.display = "none"; // Hide the menu
+      drawPolygon(); // Redraw the polygon
+      updateStatusMessage(); // Update the status message
+    };
+
+    // Attach mutate functionality to the menu
+    mutateButton.onclick = function () {
+      const [a, b] = diagonals[clickedDiagonal];
+      const replacement = findReplacementDiagonal(a, b);
+
+      if (replacement) {
+        diagonals.splice(clickedDiagonal, 1); // Remove the current diagonal
+        diagonals.push(replacement); // Add the replacement diagonal
+        vertexMenu.style.display = "none"; // Hide the menu
+        drawPolygon(); // Redraw the polygon
+        updateStatusMessage(); // Update the status message
+      } else {
+        alert("No valid replacement diagonal found!");
+      }
+    };
+  } else {
+    // Hide the menu if no diagonal is clicked
+    const vertexMenu = document.getElementById("vertexMenu");
+    vertexMenu.style.display = "none";
+  }
+});

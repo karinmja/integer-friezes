@@ -98,3 +98,31 @@ table td {
   gap: 10px; /* Add spacing between buttons */
   margin-top: 20px; /* Add spacing above the button group */
 }
+
+/* Context menu for vertex actions */
+#vertexMenu {
+  position: absolute;
+  display: none; /* Hidden by default */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+}
+
+#vertexMenu button {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 14px;
+  text-align: left;
+  border: none;
+  background: none;
+  background-color: #f00000;
+  cursor: pointer;
+}
+
+#vertexMenu button:hover {
+  background-color: #f00000;
+}
