@@ -13,13 +13,8 @@ body {
 
   #resetButton {
     font-size: 16px;
-    padding: 10px 20px;
     margin-top: 10px;
     background-color: #f44336;  /* Red button */
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
   }
   
   #resetButton:hover {
@@ -72,4 +67,34 @@ table td {
   max-width: 600px; /* Optional: Adjust width to match the canvas */
   word-wrap: break-word; /* Ensure long text wraps properly */
   text-align: center; /* Center-align the text */
+}
+
+/* Shared button styles */
+.action-button {
+  display: block;
+  margin: 10px auto;
+  font-size: 16px;
+  background-color: #007BFF; /* Blue background */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+.action-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Style for the secondary button group */
+#buttonGroup {
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  justify-content: center; /* Center the buttons horizontally */
+  gap: 10px; /* Add spacing between buttons */
+  margin-top: 20px; /* Add spacing above the button group */
 }

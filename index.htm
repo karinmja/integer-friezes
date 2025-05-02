@@ -10,12 +10,14 @@
   <div id="numVerticesContainer">
     <label for="numVertices">Choose number of vertices (min. 4): </label> 
     <input type="number" id="numVertices" value="7" min="4" max="100">
-    <button id="updatePolygon">Update Polygon</button>
-    <button id="resetButton" style="display: block; margin: 10px auto; padding: 10px 20px; font-size: 16px;">Reset</button>
-    <button id="completeTriangulation" style="display: block; margin: 10px auto; padding: 10px 20px; font-size: 16px;">Complete triangulation</button>
-    <button id="fanTriangulation" style="display: block; margin: 10px auto; padding: 10px 20px; font-size: 16px;">Fan Triangulation</button>
-    <button id="zigZagTriangulation" style="display: block; margin: 10px auto; padding: 10px 20px; font-size: 16px;">Zig-Zag Triangulation</button>
-</div>
+    <button id="updatePolygon" class="action-button">Update Polygon</button>
+  </div>
+    <div id="buttonGroup">
+      <button id="resetButton" class="action-button">Empty polygon</button>
+      <button id="completeTriangulation" class="action-button">Complete triangulation</button>
+      <button id="fanTriangulation" class="action-button">Fan Triangulation</button>
+      <button id="zigZagTriangulation" class="action-button">Zig-Zag Triangulation</button>
+    </div>
   <div id="mainContainer">
     <canvas id="canvas" width="600" height="600"></canvas>
     <div id="statusMessage" style="font-size: 16px; margin-left: 20px;"></div>
