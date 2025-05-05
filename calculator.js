@@ -177,7 +177,7 @@ function drawPolygon() {
     ctx.font = "14px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(i, v.x, v.y);  // optional: show index numbers
+    //ctx.fillText(i, v.x, v.y);  // optional: show index numbers
   });
 
   // Draw highlight for selected vertices
@@ -204,6 +204,15 @@ function updatePolygonSize() {
     alert("The polygon must have at least 4 vertices!");
     return;
   }
+  if (numVertices > 50) {
+    alert("The polygon must have at most 50 vertices!");
+    return;
+  }
+  if (n === numVertices) {
+    alert("The polygon already has that many vertices!");
+    return;
+  }
+
   n = numVertices;
   // Reset diagonals and selected vertices
   diagonals = [];
