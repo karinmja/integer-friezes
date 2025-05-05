@@ -48,6 +48,9 @@ This application explores the relationship between:
 3. **Complete Triangulation**:
    - Continue adding diagonals until you have a maximal set (full triangulation)
    - The application will indicate below when the triangulation is complete.
+   - Alternatively, use one of the buttons to autogenerate a triangulation:
+      - Complete triangulation will randomly add (compatible) diagonals until a complete triangulation is formed. It does not delete whatever is currently drawn.
+      - Fan triangulation and zig zag triangulation will load two standard frieze patterns.
    
 4. **Generate Frieze Pattern**:
    - Once triangulation is complete, the associated integer frieze pattern will be calculated and displayed
