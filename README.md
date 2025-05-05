@@ -74,6 +74,11 @@ When a diagonal is "flipped" in a triangulation:
 - The two triangulations differ by exactly one diagonal
 - This operation corresponds to a specific transformation of the associated frieze pattern
 
+## Future development
+
+- Add more resources on integer friezes
+- Add a bare bones manual to the website
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit a pull request or create an issue to discuss potential improvements.
