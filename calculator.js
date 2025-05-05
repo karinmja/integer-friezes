@@ -34,6 +34,18 @@ function isBetween(a, b, x) {
   }
 }
 
+// Function to check if two diagonals cross
+function doDiagonalsCross(a, b, c, d) {
+  // Check if the endpoints of the diagonals are distinct
+  if (a === c || a === d || b === c || b === d) {
+    return false; // Diagonals share an endpoint, so they cannot cross
+  }
+
+  // Use the "isBetween" logic to determine if the diagonals cross
+  return (isBetween(a, b, c) !== isBetween(a, b, d)) &&
+         (isBetween(c, d, a) !== isBetween(c, d, b));
+}
+
 function updateStatusMessage() {
   const n = vertices.length;
   const statusMessage = document.getElementById("statusMessage");
@@ -101,8 +113,7 @@ function completeTriangulation() {
     // Check if the new diagonal crosses any existing diagonal
     let crosses = false;
     for (const [c, d] of diagonals) {
-      if ((isBetween(a, b, c) !== isBetween(a, b, d)) &&
-          (isBetween(c, d, a) !== isBetween(c, d, b))) {
+      if (doDiagonalsCross(a, b, c, d)) {
         crosses = true;
         break;
       }
@@ -302,8 +313,7 @@ canvas.addEventListener("click", function (e) {
     
             let crosses = false;
             for (const [c, d] of diagonals) {
-              if ((isBetween(a, b, c) !== isBetween(a, b, d)) &&
-                  (isBetween(c, d, a) !== isBetween(c, d, b))) {
+              if (doDiagonalsCross(a, b, c, d)) {
                 crosses = true;
                 break;
               }
@@ -468,12 +478,15 @@ function findReplacementDiagonal(a, b) {
       if (areAdjacent) {
         continue; // Skip adjacent vertices
       }
+
       //check that the diagonal is not an existing diagonal
       if (diagonals.some(d => (d[0] === i && d[1] === j) || (d[0] === j && d[1] === i))) {
         continue;}
+
+      // Check if the new diagonal crosses any existing diagonal
       let crosses = false;
       for (const [c, d] of diagonals) {
-        if ((c !== a || d !== b) && (isBetween(i, j, c) !== isBetween(i, j, d)) && (isBetween(c, d, i) !== isBetween(c, d, j))) {
+        if ((c !== a || d !== b) && doDiagonalsCross(i, j, c, d)) {
           crosses = true;
           break;
         }
@@ -515,11 +528,16 @@ canvas.addEventListener("click", function (e) {
   }
 
   if (clickedDiagonal !== null) {
-    // Show the menu near the clicked diagonal
+    // Show the menu next to the cursor
     const vertexMenu = document.getElementById("vertexMenu");
     vertexMenu.style.display = "block";
-    vertexMenu.style.left = `${e.clientX}px`;
-    vertexMenu.style.top = `${e.clientY}px`;
+
+    // Position the menu slightly offset from the cursor
+    const offsetX = 10; // Horizontal offset
+    const offsetY = 10; // Vertical offset
+    vertexMenu.style.left = `${e.pageX + offsetX}px`;
+    vertexMenu.style.top = `${e.pageY + offsetY}px`;
+
 
     // Enable or disable the "Mutate" button based on triangulation status
     const mutateButton = document.getElementById("mutateDiagonal");
