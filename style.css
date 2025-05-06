@@ -155,7 +155,9 @@ table td {
   border-radius: 5px;
   width: 50%; /* Adjust width as needed */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  text-align: left;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 /* Close button */

@@ -13,12 +13,60 @@
       <span class="close-button">&times;</span>
       <h2>About This Calculator</h2>
       <p>
-        This calculator was created by <a href="https://sites.google.com/view/karin-m-jacobsen" target="_blank">Karin M. Jacobsen</a>.
-        It allows you to explore polygon triangulations and frieze patterns interactively.
+        This calculator was created by <a href="https://sites.google.com/view/karin-m-jacobsen" target="_blank">Karin M. Jacobsen</a>.<br>
+        It allows you to explore polygon triangulations and frieze patterns interactively.<br>
+        The project has a <a href="https://github.com/karinmja/integer-friezes" target="_blank">github repository</a> and welcomes contributions!
       </p>
-      <p>
-        Click on two non-adjacent vertices to create a diagonal. Click on a diagonal to delete or mutate it.
+      <h3>How to Use</h3>
+      <ol>
+        <li>Create a Polygon
+          <ul>
+            <li>The application starts with a polygon of 7 vertices, but you can choose from 4 to 50</li>
+            <li>Adjust the number of vertices using the controls provided</li>
+          </ul>
+        </li>
+        <li> Add diagonals
+          <ul>
+            <li>Click on two non-adjacent vertices to create a diagonal</li>
+            <li>The application will only allow diagonals that don't cross existing ones</li>
+          </ul>
+        </li>
+        <li> Complete Triangulation
+          <ul>
+            <li>Continue adding diagonals until you have a maximal set (full triangulation)</li>
+            <li>The application will indicate below when the triangulation is complete</li>
+            <li>Alternatively, use one of the buttons to autogenerate a triangulation:
+              <ul>
+                <li>Complete triangulation will randomly add (compatible) diagonals until a complete triangulation is formed. It does not delete whatever is currently drawn.</li>
+                <li>Fan triangulation and zig zag triangulation will load two standard frieze patterns.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Generate Frieze Pattern
+          <ul>
+            <li>Once triangulation is complete, the associated integer frieze pattern will be calculated and displayed</li>
+          </ul>
+        </li>
+        <li>Manipulate Diagonals
+          <ul>
+            <li>Click on an existing diagonal to delete or mutate it - the latter option is only available once you have a full triangulation</li>
+            <li>Observe how the frieze pattern changes with different triangulations!</li>
+          </ul>
+      </ol>
+
+      <h3>About Frieze Patterns</h3>
+      <p> Integer frieze patterns  were first described by Conway and Coxeter in 1974. They are integer arrays that satisfy certain conditions, most importantly the "frieze condition", which states than any 2x2 "diamond" of entries must create a matrix with determinant 1.</p>
+      <p> Friezes are closely connected to triangulations of polygons, and also show up in other algebraic and combinatorial areas. Below are some links to more information about friezes:
+      <ul>
+        <li><a href="https://d-nb.info/1242852654/34"> Introduction to integer friezes </a>  by Karin Baur </li>
+        <li><a href="https://www.youtube.com/watch?v=0mXz-NP-raY"> Numberphile video on frieze patterns</a> </li>
+        <li> Coxeter and Conway's original paper(s): <a href="https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=80e59fb13f7afdedf9559a327d443f0f295ef7fa"> Questions </a> and <a href="https://www.jstor.org/stable/3615561"> answers</a> </li>
+        <li><a href="https://arxiv.org/pdf/1503.05049v1"></a> Sophie Mourier-Genoud's survey on friezes </li>
+      </ul>
+
       </p>
+        
     </div>
   </div>
   
