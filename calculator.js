@@ -49,8 +49,11 @@ function doDiagonalsCross(a, b, c, d) {
 function updateStatusMessage() {
   const n = vertices.length;
   const statusMessage = document.getElementById("statusMessage");
+  const diagonalsNeeded = n - 3;
+  const currentDiagonals = diagonals.length;
+  const remainingDiagonals = diagonalsNeeded - currentDiagonals;
 
-  if (diagonals.length === n - 3) {
+  if (currentDiagonals === diagonalsNeeded) {
     const quidditySequence = calculateQuidditySequence();
     const frieze = calculateFrieze(quidditySequence);
 
@@ -77,10 +80,8 @@ function updateStatusMessage() {
     `;
 
     statusMessage.innerHTML = `Full triangulation! <br/> Quiddity sequence: [${quidditySequence.join(", ")}]<br><br>Frieze pattern:<br>${friezeHTML}`;
-  } else if (diagonals.length === 1) {
-    statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonal.`;
   } else if (diagonals.length < n - 3) {
-    statusMessage.textContent = `Partial triangulation: ${diagonals.length} diagonals.`;
+    statusMessage.textContent = `Partial triangulation: ${currentDiagonals} out of ${diagonalsNeeded} diagonals drawn; need ${remainingDiagonals} more.`;
   } else {
     statusMessage.textContent = "Error: too many diagonals! Please tell me how you did that.";
   }
