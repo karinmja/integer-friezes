@@ -89,6 +89,13 @@ table td {
   background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* Disabled button styling */
+.action-button.disabled {
+  background-color: #ccc !important; /* Grey background */
+  color: #666; /* Grey text */
+  cursor: not-allowed; /* Show "not allowed" cursor */
+}
+
 
 /* Style for the secondary button group */
 #buttonGroup {
@@ -119,10 +126,49 @@ table td {
   text-align: left;
   border: none;
   background: none;
-  background-color: #f00000;
+  background-color: #007BFF;
   cursor: pointer;
 }
 
 #vertexMenu button:hover {
   background-color: #f00000;
+}
+
+/* Modal container (hidden by default) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1001; /* Above other elements */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: white;
+  margin: 15% auto; /* Center vertically */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 50%; /* Adjust width as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Close button */
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
 }

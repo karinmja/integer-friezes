@@ -457,6 +457,16 @@ canvas.addEventListener("click", function (e) {
     vertexMenu.style.left = `${e.clientX}px`;
     vertexMenu.style.top = `${e.clientY}px`;
 
+    // Enable or disable the "Mutate" button based on triangulation status
+    const mutateButton = document.getElementById("mutateDiagonal");
+    if (isFullTriangulation()) {
+      mutateButton.disabled = false; // Enable the button
+      mutateButton.classList.remove("disabled"); // Remove disabled styling
+    } else {
+      mutateButton.disabled = true; // Disable the button
+      mutateButton.classList.add("disabled"); // Add disabled styling
+    }
+
     // Attach delete functionality to the menu
     const deleteButton = document.getElementById("deleteVertex");
     deleteButton.onclick = function () {
@@ -584,5 +594,28 @@ canvas.addEventListener("click", function (e) {
     // Hide the menu if no diagonal is clicked
     const vertexMenu = document.getElementById("vertexMenu");
     vertexMenu.style.display = "none";
+  }
+});
+
+//About modal functionality
+// Get modal elements
+const aboutModal = document.getElementById("aboutModal");
+const aboutButton = document.getElementById("aboutButton");
+const closeButton = document.querySelector(".close-button");
+
+// Open the modal when the About button is clicked
+aboutButton.addEventListener("click", function () {
+  aboutModal.style.display = "block";
+});
+
+// Close the modal when the close button is clicked
+closeButton.addEventListener("click", function () {
+  aboutModal.style.display = "none";
+});
+
+// Close the modal when clicking outside the modal content
+window.addEventListener("click", function (event) {
+  if (event.target === aboutModal) {
+    aboutModal.style.display = "none";
   }
 });

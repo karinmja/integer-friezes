@@ -6,8 +6,27 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Click to Triangulate</h1>
+  <h1>Polygon triangulations and frieze patterns</h1>
+   <!-- About Modal -->
+  <div id="aboutModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>About This Calculator</h2>
+      <p>
+        This calculator was created by <a href="https://sites.google.com/view/karin-m-jacobsen" target="_blank">Karin M. Jacobsen</a>.
+        It allows you to explore polygon triangulations and frieze patterns interactively.
+      </p>
+      <p>
+        Click on two non-adjacent vertices to create a diagonal. Click on a diagonal to delete or mutate it.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Add a button to open the About modal -->
+  <button id="aboutButton" class="action-button">About</button>
   <div id="numVerticesContainer">
+    
+
     <label for="numVertices">Choose number of vertices (min. 4): </label> 
     <input type="number" id="numVertices" value="7" min="4" max="50">
     <button id="updatePolygon" class="action-button">Update Polygon</button>
